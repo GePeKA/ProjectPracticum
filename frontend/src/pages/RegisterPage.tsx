@@ -2,9 +2,11 @@ import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ApiError, api, type AuthResult } from '../api'
 import { useAuth } from '../auth'
+import { useLocale } from '../locale'
 
 export function RegisterPage() {
   const { setSession } = useAuth()
+  const { t } = useLocale()
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
@@ -23,16 +25,16 @@ export function RegisterPage() {
       navigate('/')
     }
     catch (reason) {
-      setError(reason instanceof ApiError ? reason.message : 'Не получилось зарегистрироваться.')
+      setError(reason instanceof ApiError ? reason.message : t('registerFailed'))
     }
   }
 
   return (
     <>
-      <h1>Регистрация</h1>
+      <h1>{t('register')}</h1>
       <form onSubmit={onSubmit}>
         <label>
-          Имя
+          {t('name')}
           <input value={displayName} onChange={event => setDisplayName(event.target.value)} required />
         </label>
         <label>
@@ -40,13 +42,13 @@ export function RegisterPage() {
           <input type="email" value={email} onChange={event => setEmail(event.target.value)} required />
         </label>
         <label>
-          Пароль
+          {t('password')}
           <input type="password" value={password} onChange={event => setPassword(event.target.value)} minLength={8} required />
         </label>
         {error ? <p className="error">{error}</p> : null}
         <div className="form-actions">
-          <button type="submit">Создать аккаунт</button>
-          <Link to="/login">Уже есть аккаунт</Link>
+          <button type="submit">{t('createAccount')}</button>
+          <Link to="/login">{t('haveAccount')}</Link>
         </div>
       </form>
     </>

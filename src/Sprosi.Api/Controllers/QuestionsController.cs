@@ -105,7 +105,7 @@ public sealed class QuestionsController : ControllerBase
     {
         var id = CurrentUserId();
         if (id is null)
-            throw new UnauthorizedException("Нужно войти.");
+            throw new UnauthorizedException(ErrorCodes.SignInRequired);
 
         return id.Value;
     }

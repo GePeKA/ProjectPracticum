@@ -5,13 +5,17 @@ namespace Sprosi.Application.Common;
 /// </summary>
 public abstract class AppException : Exception
 {
+    /// <summary>Stable code used to pick a language.</summary>
+    public string Code { get; }
+
     /// <summary>
-    /// Creates an exception with a message for the client.
+    /// Creates an exception. <see cref="Exception.Message"/> stays Russian for callers that do not send a language.
     /// </summary>
-    /// <param name="message">Russian message returned by the API.</param>
-    protected AppException(string message)
-        : base(message)
+    /// <param name="code">Error code from <see cref="ErrorCodes"/>.</param>
+    protected AppException(string code)
+        : base(UserText.Get(null, code))
     {
+        Code = code;
     }
 }
 
@@ -23,9 +27,9 @@ public sealed class ValidationException : AppException
     /// <summary>
     /// Creates a validation error.
     /// </summary>
-    /// <param name="message">What the caller should fix.</param>
-    public ValidationException(string message)
-        : base(message)
+    /// <param name="code">Error code from <see cref="ErrorCodes"/>.</param>
+    public ValidationException(string code)
+        : base(code)
     {
     }
 }
@@ -38,9 +42,9 @@ public sealed class UnauthorizedException : AppException
     /// <summary>
     /// Creates an authentication error.
     /// </summary>
-    /// <param name="message">Message returned to the caller.</param>
-    public UnauthorizedException(string message)
-        : base(message)
+    /// <param name="code">Error code from <see cref="ErrorCodes"/>.</param>
+    public UnauthorizedException(string code)
+        : base(code)
     {
     }
 }
@@ -53,9 +57,9 @@ public sealed class ForbiddenException : AppException
     /// <summary>
     /// Creates an authorization error.
     /// </summary>
-    /// <param name="message">Message returned to the caller.</param>
-    public ForbiddenException(string message)
-        : base(message)
+    /// <param name="code">Error code from <see cref="ErrorCodes"/>.</param>
+    public ForbiddenException(string code)
+        : base(code)
     {
     }
 }
@@ -68,9 +72,9 @@ public sealed class NotFoundException : AppException
     /// <summary>
     /// Creates a not-found error.
     /// </summary>
-    /// <param name="message">Message returned to the caller.</param>
-    public NotFoundException(string message)
-        : base(message)
+    /// <param name="code">Error code from <see cref="ErrorCodes"/>.</param>
+    public NotFoundException(string code)
+        : base(code)
     {
     }
 }
@@ -83,9 +87,9 @@ public sealed class ConflictException : AppException
     /// <summary>
     /// Creates a conflict error.
     /// </summary>
-    /// <param name="message">Message returned to the caller.</param>
-    public ConflictException(string message)
-        : base(message)
+    /// <param name="code">Error code from <see cref="ErrorCodes"/>.</param>
+    public ConflictException(string code)
+        : base(code)
     {
     }
 }

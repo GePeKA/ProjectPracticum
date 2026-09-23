@@ -95,7 +95,7 @@ public sealed class AnswersController : ControllerBase
     {
         var value = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
         if (!Guid.TryParse(value, out var id))
-            throw new UnauthorizedException("Нужно войти.");
+            throw new UnauthorizedException(ErrorCodes.SignInRequired);
 
         return id;
     }

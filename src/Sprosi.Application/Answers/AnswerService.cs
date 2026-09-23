@@ -51,7 +51,7 @@ public sealed class AnswerService
         CancellationToken cancellationToken)
     {
         _ = await _questions.FindAsync(questionId, cancellationToken)
-            ?? throw new NotFoundException("Вопрос не найден.");
+            ?? throw new NotFoundException(ErrorCodes.QuestionNotFound);
 
         var now = _clock.UtcNow;
         var answer = new Answer
@@ -86,10 +86,10 @@ public sealed class AnswerService
         CancellationToken cancellationToken)
     {
         var answer = await _answers.FindAsync(answerId, cancellationToken)
-            ?? throw new NotFoundException("Ответ не найден.");
+            ?? throw new NotFoundException(ErrorCodes.AnswerNotFound);
 
         if (answer.AuthorId != authorId)
-            throw new ForbiddenException("Нельзя изменить чужой ответ.");
+            throw new ForbiddenException(ErrorCodes.AnswerEditForbidden);
 
         answer.Body = ReadBody(body);
         answer.UpdatedAt = _clock.UtcNow;
@@ -109,10 +109,10 @@ public sealed class AnswerService
     public async Task<QuestionDetails> DeleteAsync(Guid answerId, Guid authorId, CancellationToken cancellationToken)
     {
         var answer = await _answers.FindAsync(answerId, cancellationToken)
-            ?? throw new NotFoundException("Ответ не найден.");
+            ?? throw new NotFoundException(ErrorCodes.AnswerNotFound);
 
         if (answer.AuthorId != authorId)
-            throw new ForbiddenException("Нельзя удалить чужой ответ.");
+            throw new ForbiddenException(ErrorCodes.AnswerDeleteForbidden);
 
         var questionId = answer.QuestionId;
         await _answers.RemoveAsync(answer, cancellationToken);
@@ -135,10 +135,10 @@ public sealed class AnswerService
         var answer = question.Answers.First(item => item.Id == answerId);
 
         if (question.AuthorId != userId)
-            throw new ForbiddenException("Отметить ответ может только автор вопроса.");
+            throw new ForbiddenException(ErrorCodes.AcceptForbidden);
 
         if (answer.AuthorId == userId)
-            throw new ValidationException("Нельзя отметить свой ответ как лучший.");
+            throw new ValidationException(ErrorCodes.AcceptOwnAnswer);
 
         foreach (var item in question.Answers)
             item.IsAccepted = item.Id == answer.Id;
@@ -166,10 +166,10 @@ public sealed class AnswerService
         var answer = question.Answers.First(item => item.Id == answerId);
 
         if (question.AuthorId != userId)
-            throw new ForbiddenException("Снять отметку может только автор вопроса.");
+            throw new ForbiddenException(ErrorCodes.ClearForbidden);
 
         if (!answer.IsAccepted)
-            throw new ValidationException("Этот ответ не отмечен как лучший.");
+            throw new ValidationException(ErrorCodes.AnswerNotAccepted);
 
         answer.IsAccepted = false;
         await _questions.SaveAsync(cancellationToken);
@@ -179,20 +179,20 @@ public sealed class AnswerService
     private async Task<Question> LoadQuestion(Guid answerId, CancellationToken cancellationToken)
     {
         var answer = await _answers.FindAsync(answerId, cancellationToken)
-            ?? throw new NotFoundException("Ответ не найден.");
+            ?? throw new NotFoundException(ErrorCodes.AnswerNotFound);
 
         return await _questions.FindAsync(answer.QuestionId, cancellationToken)
-            ?? throw new NotFoundException("Вопрос не найден.");
+            ?? throw new NotFoundException(ErrorCodes.QuestionNotFound);
     }
 
     private static string ReadBody(string? body)
     {
         var text = body?.Trim() ?? string.Empty;
         if (text.Length == 0)
-            throw new ValidationException("Напишите текст ответа.");
+            throw new ValidationException(ErrorCodes.AnswerRequired);
 
         if (text.Length > 5000)
-            throw new ValidationException("Текст ответа не длиннее 5000 символов.");
+            throw new ValidationException(ErrorCodes.AnswerTooLong);
 
         return text;
     }
