@@ -36,7 +36,7 @@
 
 `GET /api/questions`
 
-Параметры: `topic` (`Study`, `Everyday`, `City`, `Tech`, `Other`), `status` (`all`, `open`, `resolved`), `sort` (`new`, `old`, `popular`), `q` (фрагмент заголовка), `page`, `pageSize` (не больше 50).
+Параметры: `topic` (`Study`, `Everyday`, `City`, `Tech`, `Other`), `status` (`all`, `open`, `resolved`), `sort` (`new`, `old`, `popular`), `q` (фрагмент заголовка), `page`, `pageSize` (не больше 50). В ответах `topic` приходит тем же именем, не числом.
 
 `open` — ещё нет лучшего ответа, `resolved` — лучший ответ выбран. В каждой строке есть `answerCount` и `hasAcceptedAnswer`.
 
