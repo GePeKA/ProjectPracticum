@@ -12,11 +12,10 @@ public sealed class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
     /// Creates a context for migration commands.
     /// </summary>
     /// <param name="args">Arguments passed by the EF tool. Not used.</param>
-    /// <returns>A context pointed at the local or <c>SPROSI_CONNECTION</c> database.</returns>
+    /// <returns>A context pointed at the local database from appsettings.</returns>
     public AppDbContext CreateDbContext(string[] args)
     {
-        var connectionString = Environment.GetEnvironmentVariable("SPROSI_CONNECTION")
-            ?? "Host=localhost;Port=5432;Database=sprosi;Username=postgres;Password=postgres";
+        var connectionString = "Host=localhost;Port=5432;Database=sprosi;Username=postgres;Password=admin";
 
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(connectionString)
