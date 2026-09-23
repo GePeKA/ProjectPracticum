@@ -24,10 +24,10 @@ public sealed class Question
     public Topic Topic { get; set; }
 
     /// <summary>Moment the question was created, in UTC.</summary>
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>Moment the question was last changed, in UTC.</summary>
-    public DateTime UpdatedAt { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
 
     /// <summary>Answers written for this question.</summary>
     public ICollection<Answer> Answers { get; set; } = new List<Answer>();

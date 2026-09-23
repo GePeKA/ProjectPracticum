@@ -18,5 +18,5 @@ public sealed class User
     public string PasswordHash { get; set; } = string.Empty;
 
     /// <summary>Moment the account was created, in UTC.</summary>
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 }
