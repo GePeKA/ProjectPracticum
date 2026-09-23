@@ -1,0 +1,42 @@
+:root {
+  color-scheme: light;
+  --paper: #f3efe7;
+  --ink: #1c1915;
+  --muted: #5e584f;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.shell {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem;
+}
+
+.mark {
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  font-size: 2.6rem;
+  line-height: 1.15;
+  margin: 0.6rem 0 1rem;
+}
+
+.lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
