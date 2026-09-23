@@ -10,4 +10,4 @@
 
 Таблицы PostgreSQL описаны в [docs/database.md](docs/database.md).
 
-Регистрация и вход описаны в [docs/api.md](docs/api.md). Как поднять API локально — в [docs/development.md](docs/development.md).
+HTTP API описан в [docs/api.md](docs/api.md). Как поднять API и интерфейс — в [docs/development.md](docs/development.md).
