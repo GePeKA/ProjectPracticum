@@ -21,6 +21,8 @@ public sealed class AnswerConfiguration : IEntityTypeConfiguration<Answer>
             .HasForeignKey(answer => answer.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasIndex(answer => new { answer.QuestionId, answer.CreatedAt });
+
         builder.HasIndex(answer => answer.QuestionId)
             .IsUnique()
             .HasFilter("is_accepted = true")
