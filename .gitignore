@@ -1,0 +1,30 @@
+# Сборка .NET
+bin/
+obj/
+out/
+
+# Visual Studio и Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Локальные секреты
+.env
+.env.*
+appsettings.*.local.json
+secrets.json
+
+# Node
+node_modules/
+frontend/dist/
+*.local
+
+# Контекст для агентов, в репозиторий не входит
+AGENTS.md
+CONTEXT.md
+
+# Служебные файлы редактора
+.cursor/
