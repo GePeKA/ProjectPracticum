@@ -2,9 +2,11 @@ import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ApiError, api, type AuthResult } from '../api'
 import { useAuth } from '../auth'
+import { useLocale } from '../locale'
 
 export function LoginPage() {
   const { setSession } = useAuth()
+  const { t } = useLocale()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -22,26 +24,26 @@ export function LoginPage() {
       navigate('/')
     }
     catch (reason) {
-      setError(reason instanceof ApiError ? reason.message : 'Не получилось войти.')
+      setError(reason instanceof ApiError ? reason.message : t('signInFailed'))
     }
   }
 
   return (
     <>
-      <h1>Вход</h1>
+      <h1>{t('signIn')}</h1>
       <form onSubmit={onSubmit}>
         <label>
           Email
           <input type="email" value={email} onChange={event => setEmail(event.target.value)} required />
         </label>
         <label>
-          Пароль
+          {t('password')}
           <input type="password" value={password} onChange={event => setPassword(event.target.value)} required />
         </label>
         {error ? <p className="error">{error}</p> : null}
         <div className="form-actions">
-          <button type="submit">Войти</button>
-          <Link to="/register">Нет аккаунта</Link>
+          <button type="submit">{t('signIn')}</button>
+          <Link to="/register">{t('noAccount')}</Link>
         </div>
       </form>
     </>

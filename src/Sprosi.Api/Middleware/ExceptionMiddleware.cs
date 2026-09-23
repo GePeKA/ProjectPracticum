@@ -39,7 +39,8 @@ public sealed class ExceptionMiddleware
                 _ => StatusCodes.Status400BadRequest,
             };
             context.Response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(new { message = exception.Message });
+            var message = UserText.Get(context.Request.Headers.AcceptLanguage, exception.Code);
+            await context.Response.WriteAsJsonAsync(new { code = exception.Code, message });
         }
     }
 }

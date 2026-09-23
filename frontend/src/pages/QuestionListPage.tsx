@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ApiError, api } from '../api'
 import { useAuth } from '../auth'
+import { useLocale } from '../locale'
 import type { QuestionPage } from '../questions'
-import { formatWhen, topicLabel, topicOptions } from '../topics'
+import { topicValues } from '../topics'
 
 export function QuestionListPage() {
   const { session } = useAuth()
+  const { t, formatWhen, topicLabel, answersLabel } = useLocale()
   const [topic, setTopic] = useState('')
   const [status, setStatus] = useState('all')
   const [sort, setSort] = useState('new')
@@ -30,13 +32,13 @@ export function QuestionListPage() {
       })
       .catch(reason => {
         if (!ignore)
-          setError(reason instanceof ApiError ? reason.message : 'Не получилось загрузить вопросы.')
+          setError(reason instanceof ApiError ? reason.message : t('loadFailed'))
       })
 
     return () => {
       ignore = true
     }
-  }, [topic, status, sort, search, page])
+  }, [topic, status, sort, search, page, t])
 
   const totalPages = data ? Math.max(1, Math.ceil(data.total / data.pageSize)) : 1
 
@@ -44,14 +46,14 @@ export function QuestionListPage() {
     <>
       <div className="page-head">
         <div>
-          <p className="mark">Лента</p>
-          <h1>Вопросы</h1>
+          <p className="mark">{t('feed')}</p>
+          <h1>{t('questions')}</h1>
         </div>
-        {session ? <Link className="button-link" to="/questions/new">Задать вопрос</Link> : null}
+        {session ? <Link className="button-link" to="/questions/new">{t('ask')}</Link> : null}
       </div>
       <div className="filters">
         <input
-          placeholder="Поиск по заголовку"
+          placeholder={t('search')}
           value={search}
           onChange={event => {
             setPage(1)
@@ -59,28 +61,28 @@ export function QuestionListPage() {
           }}
         />
         <select value={topic} onChange={event => { setPage(1); setTopic(event.target.value) }}>
-          <option value="">Все темы</option>
-          {topicOptions.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
+          <option value="">{t('allTopics')}</option>
+          {topicValues.map(value => <option key={value} value={value}>{topicLabel(value)}</option>)}
         </select>
         <select value={status} onChange={event => { setPage(1); setStatus(event.target.value) }}>
-          <option value="all">Все</option>
-          <option value="open">Ждут ответа</option>
-          <option value="resolved">Есть лучший ответ</option>
+          <option value="all">{t('all')}</option>
+          <option value="open">{t('waiting')}</option>
+          <option value="resolved">{t('resolved')}</option>
         </select>
         <select value={sort} onChange={event => { setPage(1); setSort(event.target.value) }}>
-          <option value="new">Сначала новые</option>
-          <option value="old">Сначала старые</option>
-          <option value="popular">Больше ответов</option>
+          <option value="new">{t('sortNew')}</option>
+          <option value="old">{t('sortOld')}</option>
+          <option value="popular">{t('sortPopular')}</option>
         </select>
       </div>
       {error ? <p className="error">{error}</p> : null}
       <div className="cards">
-        {data?.items.length === 0 ? <p className="lead">Пока ничего не нашлось.</p> : null}
+        {data?.items.length === 0 ? <p className="lead">{t('empty')}</p> : null}
         {data?.items.map(item => (
           <article className="card" key={item.id}>
             <div className="card-meta">
               <span>{topicLabel(item.topic)}</span>
-              <span>{item.hasAcceptedAnswer ? 'Есть лучший ответ' : 'Ждёт ответа'}</span>
+              <span>{item.hasAcceptedAnswer ? t('resolvedShort') : t('waitingShort')}</span>
             </div>
             <h2><Link to={`/questions/${item.id}`}>{item.title}</Link></h2>
             <p className="quiet">
@@ -88,28 +90,18 @@ export function QuestionListPage() {
               {' · '}
               {formatWhen(item.createdAt)}
               {' · '}
-              {item.answerCount} {answersWord(item.answerCount)}
+              {item.answerCount} {answersLabel(item.answerCount)}
             </p>
           </article>
         ))}
       </div>
       {data && data.total > data.pageSize ? (
         <div className="form-actions">
-          <button type="button" disabled={page <= 1} onClick={() => setPage(current => current - 1)}>Назад</button>
-          <span className="quiet">{page} из {totalPages}</span>
-          <button type="button" disabled={page >= totalPages} onClick={() => setPage(current => current + 1)}>Дальше</button>
+          <button type="button" disabled={page <= 1} onClick={() => setPage(current => current - 1)}>{t('back')}</button>
+          <span className="quiet">{page} {t('of')} {totalPages}</span>
+          <button type="button" disabled={page >= totalPages} onClick={() => setPage(current => current + 1)}>{t('next')}</button>
         </div>
       ) : null}
     </>
   )
-}
-
-function answersWord(count: number) {
-  const mod10 = count % 10
-  const mod100 = count % 100
-  if (mod10 === 1 && mod100 !== 11)
-    return 'ответ'
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
-    return 'ответа'
-  return 'ответов'
 }
