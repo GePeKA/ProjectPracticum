@@ -33,6 +33,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("frontend", policy =>
+        policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod());
+});
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -43,6 +48,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
+app.UseCors("frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

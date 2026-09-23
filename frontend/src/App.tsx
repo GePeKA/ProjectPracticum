@@ -1,9 +1,22 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { AuthProvider } from './auth'
+import { Layout } from './Layout'
+import { HomePage } from './pages/HomePage'
+import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
+
 export default function App() {
   return (
-    <main className="shell">
-      <p className="mark">Спроси</p>
-      <h1>Место для вопросов и ответов</h1>
-      <p className="lead">Скоро здесь можно будет задать вопрос и ответить на чужой.</p>
-    </main>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
