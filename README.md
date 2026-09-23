@@ -5,3 +5,5 @@
 Стек: .NET, React, PostgreSQL.
 
 Как устроены проекты и как открывать pull request, написано в [docs/conventions.md](docs/conventions.md).
+
+Сущности предметной области описаны в [docs/architecture.md](docs/architecture.md).
