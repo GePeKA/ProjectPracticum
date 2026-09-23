@@ -3,6 +3,11 @@
   --paper: #f3efe7;
   --ink: #1c1915;
   --muted: #5e584f;
+  --line: #ddd4c6;
+  --card: #fffdf8;
+  --accent: #1f4d4a;
+  --good: #1f6b4a;
+  --danger: #8d3b32;
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -12,10 +17,45 @@ body {
   color: var(--ink);
 }
 
+a {
+  color: var(--accent);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
+}
+
+.brand {
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  text-decoration: none;
+}
+
+.top nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.top a {
+  text-decoration: none;
+}
+
+.who {
+  color: var(--muted);
+}
+
 .shell {
-  max-width: 40rem;
+  max-width: 44rem;
   margin: 0 auto;
-  padding: 4.5rem 1.5rem;
+  padding: 2.2rem 1.5rem 4rem;
 }
 
 .mark {
@@ -29,14 +69,77 @@ body {
 h1 {
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 500;
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   line-height: 1.15;
-  margin: 0.6rem 0 1rem;
+  margin: 0.45rem 0 1rem;
 }
 
 .lead {
   margin: 0;
   color: var(--muted);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1.5;
+}
+
+form {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+}
+
+input,
+textarea,
+select,
+button,
+.text-button {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+}
+
+textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+button,
+.text-button {
+  border: 0;
+  background: var(--accent);
+  color: #f4efe6;
+  border-radius: 6px;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+}
+
+.text-button,
+button.quiet {
+  background: transparent;
+  color: var(--accent);
+  padding: 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.error {
+  color: var(--danger);
+  margin: 0;
 }
