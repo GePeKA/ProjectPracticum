@@ -18,10 +18,10 @@ PostgreSQL. Схема описана классами EF Core в `Sprosi.Data` 
 
 ## Миграции
 
-Инструмент `dotnet-ef` зафиксирован в `dotnet-tools.json`. Для применения схемы к локальной базе `sprosi` (`localhost:5432`, пользователь `postgres`, пароль `admin`):
+Инструмент `dotnet-ef` зафиксирован в `dotnet-tools.json`. При запуске API само вызывает `Database.MigrateAsync()` и догоняет схему, если она отстала. Та же локальная строка (`localhost:5432`, база `sprosi`, пользователь `postgres`, пароль `admin`) записана в `appsettings.json`.
+
+Вручную схему можно применить так:
 
 ```powershell
 dotnet ef database update --project src/Sprosi.Data --startup-project src/Sprosi.Data
 ```
-
-Та же строка записана в `appsettings.json` и в `AppDbContextFactory`.
