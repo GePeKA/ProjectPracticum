@@ -18,11 +18,10 @@ PostgreSQL. Схема описана классами EF Core в `Sprosi.Data` 
 
 ## Миграции
 
-Инструмент `dotnet-ef` зафиксирован в `dotnet-tools.json`. Строка подключения в репозиторий не кладётся. Для применения схемы:
+Инструмент `dotnet-ef` зафиксирован в `dotnet-tools.json`. Для применения схемы к локальной базе `sprosi` (`localhost:5432`, пользователь `postgres`, пароль `admin`):
 
 ```powershell
-$env:SPROSI_CONNECTION = "Host=localhost;Port=5432;Database=sprosi;Username=postgres;Password=postgres"
 dotnet ef database update --project src/Sprosi.Data --startup-project src/Sprosi.Data
 ```
 
-Если переменная `SPROSI_CONNECTION` не задана, команда `dotnet ef` берёт ту же локальную строку из `AppDbContextFactory`. Это только локальная база `sprosi`, не секрет развёрнутого окружения.
+Та же строка записана в `appsettings.json` и в `AppDbContextFactory`.
