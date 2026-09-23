@@ -10,4 +10,4 @@
 
 Таблицы PostgreSQL описаны в [docs/database.md](docs/database.md).
 
-HTTP API описан в [docs/api.md](docs/api.md). Как поднять API и интерфейс — в [docs/development.md](docs/development.md).
+HTTP API описан в [docs/api.md](docs/api.md). Язык интерфейса и показ времени — в [docs/locale.md](docs/locale.md). Как поднять API и интерфейс — в [docs/development.md](docs/development.md).
