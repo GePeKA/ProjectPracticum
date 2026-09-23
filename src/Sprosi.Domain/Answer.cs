@@ -27,8 +27,8 @@ public sealed class Answer
     public bool IsAccepted { get; set; }
 
     /// <summary>Moment the reply was created, in UTC.</summary>
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>Moment the reply was last changed, in UTC.</summary>
-    public DateTime UpdatedAt { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
 }
