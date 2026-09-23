@@ -8,7 +8,7 @@ namespace Sprosi.Application.Abstractions;
 public interface IAnswerRepository
 {
     /// <summary>
-    /// Loads an answer together with its author and question.
+    /// Loads an answer together with its author.
     /// </summary>
     /// <param name="id">Answer identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>

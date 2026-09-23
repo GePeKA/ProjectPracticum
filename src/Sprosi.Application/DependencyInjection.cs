@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Sprosi.Application.Answers;
 using Sprosi.Application.Auth;
 using Sprosi.Application.Questions;
 
@@ -18,6 +19,7 @@ public static class DependencyInjection
     {
         services.AddScoped<AuthService>();
         services.AddScoped<QuestionService>();
+        services.AddScoped<AnswerService>();
         return services;
     }
 }

@@ -25,7 +25,6 @@ public sealed class AnswerRepository : IAnswerRepository
     {
         return _db.Answers
             .Include(answer => answer.Author)
-            .Include(answer => answer.Question)
             .FirstOrDefaultAsync(answer => answer.Id == id, cancellationToken);
     }
 
