@@ -143,3 +143,89 @@ button.quiet {
   color: var(--danger);
   margin: 0;
 }
+
+.page-head,
+.filters,
+.form-actions {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.page-head {
+  justify-content: space-between;
+}
+
+.filters {
+  flex-wrap: wrap;
+  margin: 0.5rem 0 1.2rem;
+}
+
+.filters input,
+.filters select {
+  min-width: 10rem;
+}
+
+.button-link {
+  background: var(--accent);
+  color: #f4efe6;
+  text-decoration: none;
+  border-radius: 6px;
+  padding: 0.55rem 0.9rem;
+}
+
+.cards {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+}
+
+.card h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin: 0.3rem 0;
+}
+
+.card h2 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.card-meta,
+.quiet {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.body {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.best {
+  border-color: var(--good);
+}
+
+.best-label {
+  margin: 0;
+  color: var(--good);
+  font-size: 0.85rem;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
