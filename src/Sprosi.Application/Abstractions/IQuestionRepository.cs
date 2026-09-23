@@ -1,3 +1,4 @@
+using Sprosi.Application.Questions;
 using Sprosi.Domain;
 
 namespace Sprosi.Application.Abstractions;
@@ -34,4 +35,12 @@ public interface IQuestionRepository
     /// <param name="question">Question to delete.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     Task RemoveAsync(Question question, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Returns a page of questions for the public list.
+    /// </summary>
+    /// <param name="query">Filter, sort and page.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Matching rows and the total count.</returns>
+    Task<QuestionPage> ListAsync(QuestionListQuery query, CancellationToken cancellationToken);
 }

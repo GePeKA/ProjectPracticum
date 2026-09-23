@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Sprosi.Application.Abstractions;
+using Sprosi.Application.Questions;
 using Sprosi.Domain;
 
 namespace Sprosi.Data.Repositories;
@@ -48,5 +49,55 @@ public sealed class QuestionRepository : IQuestionRepository
     {
         _db.Questions.Remove(question);
         await _db.SaveChangesAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<QuestionPage> ListAsync(QuestionListQuery query, CancellationToken cancellationToken)
+    {
+        IQueryable<Question> questions = _db.Questions.AsNoTracking();
+
+        if (query.Topic is Topic topic)
+            questions = questions.Where(question => question.Topic == topic);
+
+        if (query.Status == QuestionStatusFilter.Open)
+            questions = questions.Where(question => !question.Answers.Any(answer => answer.IsAccepted));
+
+        if (query.Status == QuestionStatusFilter.Resolved)
+            questions = questions.Where(question => question.Answers.Any(answer => answer.IsAccepted));
+
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            var escaped = query.Search
+                .Replace("\\", "\\\\", StringComparison.Ordinal)
+                .Replace("%", "\\%", StringComparison.Ordinal)
+                .Replace("_", "\\_", StringComparison.Ordinal);
+            var pattern = $"%{escaped}%";
+            questions = questions.Where(question => EF.Functions.ILike(question.Title, pattern, "\\"));
+        }
+
+        questions = query.Sort switch
+        {
+            QuestionSort.Old => questions.OrderBy(question => question.CreatedAt),
+            QuestionSort.Popular => questions
+                .OrderByDescending(question => question.Answers.Count)
+                .ThenByDescending(question => question.CreatedAt),
+            _ => questions.OrderByDescending(question => question.CreatedAt),
+        };
+
+        var total = await questions.CountAsync(cancellationToken);
+        var items = await questions
+            .Skip((query.Page - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .Select(question => new QuestionListItem(
+                question.Id,
+                question.Title,
+                question.Topic,
+                question.Author!.DisplayName,
+                question.CreatedAt,
+                question.Answers.Count,
+                question.Answers.Any(answer => answer.IsAccepted)))
+            .ToListAsync(cancellationToken);
+
+        return new QuestionPage(items, query.Page, query.PageSize, total);
     }
 }
