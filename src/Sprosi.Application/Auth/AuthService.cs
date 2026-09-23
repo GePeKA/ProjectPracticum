@@ -44,19 +44,19 @@ public sealed class AuthService
         var password = request.Password ?? string.Empty;
 
         if (email.Length == 0 || displayName.Length == 0 || password.Length == 0)
-            throw new ValidationException("Заполните email, имя и пароль.");
+            throw new ValidationException(ErrorCodes.CredentialsRequired);
 
         if (!IsEmail(email))
-            throw new ValidationException("Укажите корректный email.");
+            throw new ValidationException(ErrorCodes.EmailInvalid);
 
         if (displayName.Length > 50)
-            throw new ValidationException("Имя не длиннее 50 символов.");
+            throw new ValidationException(ErrorCodes.DisplayNameTooLong);
 
         if (password.Length < 8)
-            throw new ValidationException("Пароль должен быть не короче 8 символов.");
+            throw new ValidationException(ErrorCodes.PasswordTooShort);
 
         if (await _users.FindByEmailAsync(email, cancellationToken) is not null)
-            throw new ConflictException("Пользователь с таким email уже зарегистрирован.");
+            throw new ConflictException(ErrorCodes.EmailTaken);
 
         var user = new User
         {
@@ -87,7 +87,7 @@ public sealed class AuthService
             : await _users.FindByEmailAsync(email, cancellationToken);
 
         if (user is null || !_passwords.Verify(password, user.PasswordHash))
-            throw new UnauthorizedException("Неверный email или пароль.");
+            throw new UnauthorizedException(ErrorCodes.InvalidCredentials);
 
         return new AuthResult(user.Id, user.DisplayName, _tokens.Create(user));
     }

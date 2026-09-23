@@ -66,7 +66,7 @@ public sealed class QuestionService
     public async Task<QuestionDetails> GetAsync(Guid id, Guid? currentUserId, CancellationToken cancellationToken)
     {
         var question = await _questions.FindAsync(id, cancellationToken)
-            ?? throw new NotFoundException("Вопрос не найден.");
+            ?? throw new NotFoundException(ErrorCodes.QuestionNotFound);
 
         return ToDetails(question, currentUserId);
     }
@@ -119,10 +119,10 @@ public sealed class QuestionService
         CancellationToken cancellationToken)
     {
         var question = await _questions.FindAsync(id, cancellationToken)
-            ?? throw new NotFoundException("Вопрос не найден.");
+            ?? throw new NotFoundException(ErrorCodes.QuestionNotFound);
 
         if (question.AuthorId != authorId)
-            throw new ForbiddenException("Нельзя изменить чужой вопрос.");
+            throw new ForbiddenException(ErrorCodes.QuestionEditForbidden);
 
         var (title, body, topic) = ReadFields(request.Title, request.Body, request.Topic);
         question.Title = title;
@@ -144,10 +144,10 @@ public sealed class QuestionService
     public async Task DeleteAsync(Guid id, Guid authorId, CancellationToken cancellationToken)
     {
         var question = await _questions.FindAsync(id, cancellationToken)
-            ?? throw new NotFoundException("Вопрос не найден.");
+            ?? throw new NotFoundException(ErrorCodes.QuestionNotFound);
 
         if (question.AuthorId != authorId)
-            throw new ForbiddenException("Нельзя удалить чужой вопрос.");
+            throw new ForbiddenException(ErrorCodes.QuestionDeleteForbidden);
 
         await _questions.RemoveAsync(question, cancellationToken);
     }
@@ -186,13 +186,13 @@ public sealed class QuestionService
         var normalizedTitle = title?.Trim() ?? string.Empty;
         var normalizedBody = body?.Trim() ?? string.Empty;
         if (normalizedTitle.Length == 0 || normalizedBody.Length == 0)
-            throw new ValidationException("Заполните заголовок и текст вопроса.");
+            throw new ValidationException(ErrorCodes.QuestionFieldsRequired);
 
         if (normalizedTitle.Length > 120)
-            throw new ValidationException("Заголовок не длиннее 120 символов.");
+            throw new ValidationException(ErrorCodes.TitleTooLong);
 
         if (normalizedBody.Length > 5000)
-            throw new ValidationException("Текст вопроса не длиннее 5000 символов.");
+            throw new ValidationException(ErrorCodes.QuestionBodyTooLong);
 
         return (normalizedTitle, normalizedBody, ParseTopic(topic, required: true)!.Value);
     }
@@ -202,12 +202,12 @@ public sealed class QuestionService
         if (string.IsNullOrWhiteSpace(topic))
         {
             if (required)
-                throw new ValidationException("Укажите тему.");
+                throw new ValidationException(ErrorCodes.TopicRequired);
             return null;
         }
 
         if (!Enum.TryParse<Topic>(topic.Trim(), ignoreCase: true, out var parsed) || !Enum.IsDefined(parsed))
-            throw new ValidationException("Неизвестная тема.");
+            throw new ValidationException(ErrorCodes.TopicUnknown);
 
         return parsed;
     }
@@ -223,7 +223,7 @@ public sealed class QuestionService
         if (status.Equals("resolved", StringComparison.OrdinalIgnoreCase))
             return QuestionStatusFilter.Resolved;
 
-        throw new ValidationException("Неизвестное состояние.");
+        throw new ValidationException(ErrorCodes.StatusUnknown);
     }
 
     private static QuestionSort ParseSort(string? sort)
@@ -237,6 +237,6 @@ public sealed class QuestionService
         if (sort.Equals("popular", StringComparison.OrdinalIgnoreCase))
             return QuestionSort.Popular;
 
-        throw new ValidationException("Неизвестная сортировка.");
+        throw new ValidationException(ErrorCodes.SortUnknown);
     }
 }
