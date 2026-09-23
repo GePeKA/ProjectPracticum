@@ -1,18 +1,14 @@
 # Локальный запуск API
 
-Нужны .NET SDK 10 и PostgreSQL на `localhost:5432`. По умолчанию API подключается к базе `sprosi` пользователем `postgres` с паролем `admin`. Строка лежит в `src/Sprosi.Api/appsettings.json`, ключ `ConnectionStrings:Default`.
-
-Ключ JWT в репозиторий не входит:
+Нужны .NET SDK 10, Node.js и PostgreSQL на `localhost:5432`. База `sprosi` создаётся при первом запуске, если сервер PostgreSQL уже принимает подключения пользователя `postgres` с паролем `admin`. Строка подключения и ключ JWT лежат в `src/Sprosi.Api/appsettings.json`.
 
 ```powershell
-dotnet user-secrets set "Jwt:Key" "dev-only-key-change-me-32chars-min" --project src/Sprosi.Api
-dotnet ef database update --project src/Sprosi.Data --startup-project src/Sprosi.Data
 dotnet run --project src/Sprosi.Api
 ```
 
-API слушает `http://localhost:5080`. Проверка жизни: `GET /health`.
+При старте API само применяет миграции. Слушает `http://localhost:5080`. Проверка жизни: `GET /health`.
 
-Ключ JWT короче 32 символов процесс не запускает. Как устроены таблицы, написано в [database.md](database.md).
+Как устроены таблицы, написано в [database.md](database.md).
 
 Интерфейс:
 
