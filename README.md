@@ -1,13 +1,38 @@
 # Спроси
 
-Публичный сервис вопросов и ответов для проектного практикума. Человек задаёт вопрос, другие отвечают, автор вопроса отмечает ответ, который его устроил.
+Публичный сервис вопросов и ответов. Гость читает ленту. Вошедший пользователь задаёт вопросы и отвечает. Автор вопроса отмечает один чужой ответ как лучший — после этого вопрос считается отвеченным.
 
-Стек: .NET, React, PostgreSQL.
+Темы: учёба, быт, город, техника, другое.
 
-Как устроены проекты и как открывать pull request, написано в [docs/conventions.md](docs/conventions.md).
+## Стек
 
-Сущности предметной области описаны в [docs/architecture.md](docs/architecture.md).
+- Backend: .NET 10, EF Core, PostgreSQL, JWT
+- Frontend: React, Vite, TypeScript
+- Архитектура: Domain → Application → Data / Infrastructure → Api
 
-Таблицы PostgreSQL описаны в [docs/database.md](docs/database.md).
+## Быстрый старт
 
-HTTP API описан в [docs/api.md](docs/api.md). Язык интерфейса и показ времени — в [docs/locale.md](docs/locale.md). Как поднять API и интерфейс — в [docs/development.md](docs/development.md).
+Нужны .NET SDK 10, Node.js и PostgreSQL на `localhost:5432` (пользователь `postgres`, пароль `admin`). База `sprosi` создаётся при первом запуске API.
+
+```powershell
+dotnet run --project src/Sprosi.Api
+npm install --prefix frontend
+npm run dev --prefix frontend
+```
+
+- API: `http://localhost:5080` (`GET /health`)
+- Интерфейс: `http://localhost:5173` (проксирует `/api` на API)
+
+Подробности — в [docs/development.md](docs/development.md).
+
+## Документация
+
+| Файл | О чём |
+|---|---|
+| [docs/architecture.md](docs/architecture.md) | Предметная область |
+| [docs/conventions.md](docs/conventions.md) | Слои проектов, коммиты, ветки, PR |
+| [docs/database.md](docs/database.md) | Таблицы PostgreSQL и миграции |
+| [docs/api.md](docs/api.md) | HTTP API, ответы и коды ошибок |
+| [docs/frontend.md](docs/frontend.md) | Экраны интерфейса |
+| [docs/locale.md](docs/locale.md) | Язык интерфейса и часовой пояс |
+| [docs/development.md](docs/development.md) | Локальный запуск, тесты, CI |
